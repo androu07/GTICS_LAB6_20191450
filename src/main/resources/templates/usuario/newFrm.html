@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/navbar.html :: header( title = 'Telecom 2024')}"></head>
+    <body>
+        <div class="container">
+            <nav th:replace="~{fragments/navbar.html}"></nav>
+            <div class="row mb-4">
+                <div class="col-md-6 offset-md-3">
+                    <h2>Dispositivo Form</h2>
+                    <hr/>
+                    <form th:action="@{'/dispositivos/save'}" method="post" th:object="${dispositivos}">
+                        <div class="mb-3">
+                            <label for="firstname" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" th:field="*{nombre}"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastname" class="form-label">Cantidad</label>
+                            <input type="text" class="form-control" th:field="*{cantidad}"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Stock</label>
+                            <input type="text" class="form-control" th:field="*{stock}"/>
+                        </div>
+                        <a th:href="@{'/dispositivos'}" class="btn btn-danger">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script th:replace="~{fragments/navbar.html :: footer-bootstrap}"></script>
+    </body>
+</html>
