@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/navbar.html :: header( title = 'Telecom 2024')}"></head>
+<body>
+<div class="container">
+    <nav th:replace="~{fragments/navbar.html}"></nav>
+    <h2>Prestamos</h2>
+    <a class="btn btn-primary mt-4 mb-4" sec:authorize="hasAnyAuthority('Profesor')" th:href="@{'/prestamos/new'}">Agregar Prestamo</a>
+    <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Profesor</th>
+            <th>Estudiante</th>
+            <th>Dispositivo</th>
+            <th>Fecha de Inicio</th>
+            <th>Fecha de Fin</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="prestamos, info : ${listaPrestamos}">
+            <td th:text="${info.index + 1}"></td>
+            <td th:text="${prestamos.profesor}"></td>
+            <td th:text="${prestamos.estudiante}"></td>
+            <td th:text="${prestamos.fecha_inicio}"></td>
+            <td th:text="${prestamos.fecha_fin}"></td>
+            <td sec:authorize="hasAnyAuthority('Profesor')"><a class="btn btn-primary" th:if="${usuario.id_roles.nombre == 'Profesor'}" th:href="@{'/prestamos/devolver' + '?id=' + ${prestamos.id}}">Devolver</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

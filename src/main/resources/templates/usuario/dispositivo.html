@@ -6,7 +6,7 @@
 <div class="container">
     <nav th:replace="~{fragments/navbar.html}"></nav>
     <h2>Inventario de Dispositivos</h2>
-    <a class="btn btn-primary mt-4 mb-4" th:if="${usuario.id_roles.nombre == 'Admin'}" th:href="@{'/dispositivos/new'}">Agregar Dispositivo</a>
+    <a class="btn btn-primary mt-4 mb-4" sec:authorize="hasAnyAuthority('Admin')" th:href="@{'/dispositivos/new'}">Agregar Dispositivo</a>
     <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
     <table class="table">
         <thead>
@@ -24,8 +24,8 @@
             <td th:text="${dispositivo.nombre} + ' ' +${employee.lastname}"></td>
             <td th:text="${dispositivo.cantidad}"></td>
             <td th:text="${dispositivo.stock}"></td>
-            <td><a class="btn btn-primary" th:if="${usuario.id_roles.nombre == 'Admin'}" th:href="@{'/dispositivos/edit' + '?id=' + ${dispositivo.id}}">Editar</a>
-            <a class="btn btn-danger" th:if="${usuario.id_roles.nombre == 'Admin'}" th:href="@{'/dispositivos/delete' + '?id=' + ${dispositivo.id}}">Eliminar</a>
+            <td sec:authorize="hasAnyAuthority('Admin')"><a class="btn btn-primary" th:href="@{'/dispositivos/edit' + '?id=' + ${dispositivo.id}}">Editar</a>
+            <a class="btn btn-danger" th:href="@{'/dispositivos/delete' + '?id=' + ${dispositivo.id}}">Eliminar</a>
             </td>
         </tr>
         </tbody>

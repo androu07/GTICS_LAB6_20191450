@@ -1,8 +1,10 @@
 package com.example.lab6.Controller;
 
 import com.example.lab6.Entity.Dispositivos;
+import com.example.lab6.Entity.Prestamos;
 import com.example.lab6.Entity.Usuario;
 import com.example.lab6.Repository.DispositivosRepository;
+import com.example.lab6.Repository.PrestamosRepository;
 import com.example.lab6.Repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +22,12 @@ public class UsuarioController {
     final
     UsuarioRepository usuarioRepository;
     DispositivosRepository dispositivosRepository;
+    PrestamosRepository prestamosRepository;
 
-    public UsuarioController(UsuarioRepository usuarioRepository, DispositivosRepository dispositivosRepository) {
+    public UsuarioController(UsuarioRepository usuarioRepository, DispositivosRepository dispositivosRepository, PrestamosRepository prestamosRepository) {
         this.usuarioRepository = usuarioRepository;
         this.dispositivosRepository = dispositivosRepository;
+        this.prestamosRepository = prestamosRepository;
     }
 
     @GetMapping("/dispositivos")
@@ -70,4 +74,33 @@ public class UsuarioController {
     }
 
 
+
+    @GetMapping("/prestamos")
+    public String prestamos(@ModelAttribute("usuario") Usuario usuario, Model model) {
+        model.addAttribute("listaPrestamos", prestamosRepository.findAll());
+        return "usuario/prestamos";
+    }
+
+    @GetMapping("/prestamos/new")
+    public String nuevoPrestamoFrm(@ModelAttribute("dispositivos") Dispositivos dispositivos) {
+        return "usuario/newFrm";
+    }
+
+    @PostMapping("/prestamos/save")
+    public String guardarDispositivo(Dispositivos dispositivos, RedirectAttributes attr){
+        dispositivosRepository.save(dispositivos);
+        attr.addFlashAttribute("msg", "dispositivo agregado exitosamente");
+        return "redirect:/dispositivos";
+    }
+
+    @GetMapping("/prestamos/devolver")
+    public String devolverDispositivo(@RequestParam("id") int id, RedirectAttributes attr) {
+        Optional<Prestamos> optional = prestamosRepository.findById(id);
+
+        if (optional.isPresent()) {
+            prestamosRepository.deleteById(id);
+        }
+        attr.addFlashAttribute("msg", "prestamo finalizado exitosamente");
+        return "redirect:/prestamos";
+    }
 }

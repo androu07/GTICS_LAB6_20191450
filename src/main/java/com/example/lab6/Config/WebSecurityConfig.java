@@ -58,7 +58,8 @@ public class WebSecurityConfig {
                 });
 
         http.authorizeHttpRequests()
-                .requestMatchers("/dispositivos/**").hasAnyAuthority("admin")
+                .requestMatchers("/dispositivos/**").hasAnyAuthority("Admin")
+                .requestMatchers("/prestamos", "/prestamos/**").hasAnyAuthority("Profesor", "Alumno")
                 .anyRequest().permitAll();
 
         http.logout()
@@ -72,10 +73,10 @@ public class WebSecurityConfig {
     @Bean
     public UserDetailsManager users(DataSource dataSource) {
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-        String sqlAuth = "SELECT correo, password FROM mydb.usuario where email = ?";
-        String sqlAuto = "SELECT u.email, r.nombre FROM mydb.usuario u " +
+        String sqlAuth = "SELECT correo, password FROM usuario where correo = ?";
+        String sqlAuto = "SELECT u.correo, r.nombre FROM usuario u " +
                 "inner join roles r on u.id_roles = r.id_roles " +
-                "where u.email = ?";
+                "where u.correo = ?";
 
         users.setUsersByUsernameQuery(sqlAuth);
         users.setAuthoritiesByUsernameQuery(sqlAuto);
